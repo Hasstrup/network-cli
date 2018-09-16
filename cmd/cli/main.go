@@ -16,7 +16,11 @@ func main() {
 
 	myFlags := []cli.Flag{
 		cli.StringFlag{
-			Name:  "Host",
+			Name:  "host",
+			Value: "tutorialedge.net",
+		},
+		cli.StringFlag{
+			Name:  "url",
 			Value: "tutorialedge.net",
 		},
 	}
@@ -35,6 +39,34 @@ func main() {
 				for i := 0; i < len(ns); i++ {
 					fmt.Println(ns[i].Host)
 				}
+				return nil
+			},
+		},
+		{
+			Name:  "ip",
+			Usage: "Looks up IP Addresses for a particular host",
+			Flags: myFlags,
+			Action: func(c *cli.Context) error {
+				ip, err := net.LookupIP(c.String("host"))
+				if err != nil {
+					return err
+				}
+				for i := 0; i < len(ip); i++ {
+					fmt.Println(ip[i])
+				}
+				return nil
+			},
+		},
+		{
+			Name:  "cname",
+			Usage: "Looks up the CNAME for a particular host",
+			Flags: myFlags,
+			Action: func(c *cli.Context) error {
+				cname, err := net.LookupCNAME(c.String("host"))
+				if err != nil {
+					fmt.Println(err)
+				}
+				fmt.Println(cname)
 				return nil
 			},
 		},
